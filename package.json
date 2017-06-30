@@ -1,0 +1,29 @@
+{
+  "name": "tutorial-botframework",
+  "version": "1.0.0",
+  "description": "Bot Framework example for the video series",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "tsc -p ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/szul/tutorial-botframework.git"
+  },
+  "keywords": [
+    "bots",
+    "botframework",
+    "typescript"
+  ],
+  "author": "Michael Szul <michael@szul.us>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/szul/tutorial-botframework/issues"
+  },
+  "homepage": "https://github.com/szul/tutorial-botframework#readme",
+  "dependencies": {
+    "botbuilder": "^3.8.4",
+    "typescript": "^2.4.1"
+  }
+}
