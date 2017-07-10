@@ -1,0 +1,10 @@
+<trains>
+    <route to="PHL" from="CVS">
+        <departure>2017-07-09T13:20:00</departure>
+        <arrival>2017-07-09T18:50:00</arrival>
+        <train>1789</train>
+        <from>Charlottesville, VA</from>
+        <to>Philadelphia, PA</to>
+        <status>On Time</status>
+    </route>
+</trains>
