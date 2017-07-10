@@ -1,6 +1,6 @@
-/// <reference path="../node_modules/@types/cheerio/index.d.ts" />
-/// <reference path="../node_modules/@types/node/index.d.ts" />
-/// <reference path="../dist/types.d.ts" />
+/// <reference path="../../node_modules/@types/cheerio/index.d.ts" />
+/// <reference path="../../node_modules/@types/node/index.d.ts" />
+/// <reference path="../../base/dist/types.d.ts" />
 
 import * as fs from "fs";
 import * as cheerio from "cheerio";

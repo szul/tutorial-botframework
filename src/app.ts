@@ -1,6 +1,6 @@
 /// <reference path="../node_modules/botbuilder/lib/botbuilder.d.ts" />
 /// <reference path="../node_modules/@types/restify/index.d.ts" />
-/// <reference path="../dist/amtrak.d.ts" />
+/// <reference path="../amtrak/dist/amtrak.d.ts" />
 
 import * as builder from "botbuilder";
 import * as restify from "restify";
