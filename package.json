@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/szul/tutorial-botframework#readme",
   "dependencies": {
+    "@types/restify": "^4.3.4",
     "botbuilder": "^3.8.4",
     "restify": "^5.0.0",
     "typescript": "^2.4.1"
