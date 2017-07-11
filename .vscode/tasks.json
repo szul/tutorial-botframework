@@ -1,9 +1,29 @@
 {
     "version": "0.1.0",
-    "command": "tsc",
-    "isShellCommand": true,
-    "args": ["-p", "."],
     "showOutput": "always",
     "echoCommand": true,
-    "problemMatcher": "$tsc"
+    "tasks": [
+        {
+            "taskName": "app",
+            "command": "tsc",
+            "isShellCommand": true,
+            "isBuildCommand": true,
+            "args": ["-p", "."],
+            "problemMatcher": "$tsc"
+        },
+        {
+            "taskName": "base",
+            "command": "tsc",
+            "isShellCommand": true,
+            "args": ["-p", "./base/tsconfig.json"],
+            "problemMatcher": "$tsc"
+        },
+        {
+            "taskName": "amtrak",
+            "command": "tsc",
+            "isShellCommand": true,
+            "args": ["-p", "./amtrak/tsconfig.json"],
+            "problemMatcher": "$tsc"
+        }
+    ]
 }

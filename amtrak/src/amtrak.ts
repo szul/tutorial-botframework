@@ -5,15 +5,15 @@
 import * as fs from "fs";
 import * as cheerio from "cheerio";
 
-const codes: string = fs.readFileSync("../codes.xml", "utf-8");
-const routes: string = fs.readFileSync("../amtrak.xml", "utf-8");
+const codes: string = fs.readFileSync("codes.xml", "utf-8");
+const routes: string = fs.readFileSync("amtrak.xml", "utf-8");
 const xml: CheerioStatic = cheerio.load(routes);
 
 export function getTrainRoute(to: string, from: string): Route {
     try {
         var route = xml(`route[to='${to}'][from='${from}']`).first();
         var r: Route = {
-            departure: new Date(route.find("departure").text())
+              departure: new Date(route.find("departure").text())
             , arrival: new Date(route.find("arrival").text())
             , train: route.find("train").text()
             , from: route.find("from").text()
