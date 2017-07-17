@@ -15,7 +15,6 @@ var conn = new builder.ChatConnector({
       appId: process.env.MICROSOFT_APP_ID
     , appPassword: process.env.MICROSOFT_APP_PASSWORD
 });
-
 var bot = new builder.UniversalBot(conn);
 server.post("/api/messages", conn.listen());
 
@@ -31,7 +30,7 @@ bot.dialog("/", [
         sess.userData.arrival = result.response;
         var route: Route = amtrak.getTrainRoute(sess.userData.arrival, sess.userData.departure);
         sess.userData.lastRoute = route;
-        builder.Prompts.choice(sess, `So you want to check the status of the train leaving ${route.to} and arriving at ${route.from}, correct?`, [
+        builder.Prompts.choice(sess, `So you want to check the status of the train leaving ${route.from} and arriving at ${route.to}, correct?`, [
               "Yes"
             , "No"
         ]);
@@ -39,7 +38,7 @@ bot.dialog("/", [
     (sess, result) => {
         if(result.response.entity === "Yes") {
             let route = sess.userData.lastRoute;
-            sess.send(`The current status of the train from ${route.from} to ${route.to} is: ${route.status}`);
+            sess.send(`The current status of the train from ${route.from} to ${route.to} is ${route.status}`);
         }
         else {
             sess.replaceDialog("/");
