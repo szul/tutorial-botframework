@@ -20,7 +20,15 @@ server.post("/api/messages", conn.listen());
 
 bot.dialog("/", [
     (sess, args, next) => {
-        builder.Prompts.text(sess, "Hello! What is the three letter code for the departure city?");
+        if(!sess.userData.name) {
+            sess.beginDialog("/profile");
+        }
+        else {
+            next();
+        }
+    },
+    (sess, result) => {
+        builder.Prompts.text(sess, `Hello, ${sess.userData.name}! What is the three letter code for the departure city?`);
     },
     (sess, result) => {
         sess.userData.departure = result.response;
@@ -29,11 +37,17 @@ bot.dialog("/", [
     (sess, result) => {
         sess.userData.arrival = result.response;
         var route: Route = amtrak.getTrainRoute(sess.userData.arrival, sess.userData.departure);
-        sess.userData.lastRoute = route;
-        builder.Prompts.choice(sess, `So you want to check the status of the train leaving ${route.from} and arriving at ${route.to}, correct?`, [
-              "Yes"
-            , "No"
-        ]);
+        console.log(route);
+        if(route.toCode === undefined) {
+            sess.replaceDialog("/noresults", { entry: "dialog" });
+        }
+        else {
+            sess.userData.lastRoute = route;
+            builder.Prompts.choice(sess, `So you want to check the status of the train leaving ${route.from} and arriving at ${route.to}, correct?`, [
+                  "Yes"
+                , "No"
+            ]);
+        }
     },
     (sess, result) => {
         if(result.response.entity === "Yes") {
@@ -42,6 +56,39 @@ bot.dialog("/", [
         }
         else {
             sess.replaceDialog("/");
+        }
+    }
+]);
+
+bot.dialog("/profile", [
+    (sess, args, next) => {
+        builder.Prompts.text(sess, "Hello, user! What is your name?");
+    },
+    (sess, result) => {
+        sess.userData.name = result.response;
+        sess.endDialog();
+    }
+]);
+
+bot.dialog("/noresults", [
+    (sess, args, next) => {
+        if(args.entry && args.entry === "dialog") {
+            builder.Prompts.choice(sess, "Sorry. No results were found. :( Would you like to try again?", [
+                  "Yes"
+                , "No"
+            ]);
+        }
+        else {
+            sess.send("Oh, hey! You're back. Let's start this over.");
+            sess.replaceDialog("/");
+        }
+    },
+    (sess, result) => {
+        if(result.response.entity === "Yes") {
+            sess.replaceDialog("/");
+        }
+        else {
+            sess.send("Okay, bye!");
         }
     }
 ]);
