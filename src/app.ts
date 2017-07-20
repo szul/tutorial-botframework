@@ -72,7 +72,7 @@ bot.dialog("/profile", [
 
 bot.dialog("/noresults", [
     (sess, args, next) => {
-        if(args.entry && args.entry === "dialog") {
+        if(args && args.entry && args.entry === "dialog") {
             builder.Prompts.choice(sess, "Sorry. No results were found. :( Would you like to try again?", [
                   "Yes"
                 , "No"
