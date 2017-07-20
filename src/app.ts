@@ -24,7 +24,7 @@ bot.dialog("/", [
             sess.beginDialog("/profile");
         }
         else {
-            next();
+            next()
         }
     },
     (sess, result) => {
@@ -37,7 +37,6 @@ bot.dialog("/", [
     (sess, result) => {
         sess.userData.arrival = result.response;
         var route: Route = amtrak.getTrainRoute(sess.userData.arrival, sess.userData.departure);
-        console.log(route);
         if(route.toCode === undefined) {
             sess.replaceDialog("/noresults", { entry: "dialog" });
         }
@@ -62,7 +61,7 @@ bot.dialog("/", [
 
 bot.dialog("/profile", [
     (sess, args, next) => {
-        builder.Prompts.text(sess, "Hello, user! What is your name?");
+        builder.Prompts.text(sess, "Hello, user! What is your name");
     },
     (sess, result) => {
         sess.userData.name = result.response;
@@ -72,14 +71,14 @@ bot.dialog("/profile", [
 
 bot.dialog("/noresults", [
     (sess, args, next) => {
-        if(args.entry && args.entry === "dialog") {
+        if(args && args.entry && args.entry === "dialog") {
             builder.Prompts.choice(sess, "Sorry. No results were found. :( Would you like to try again?", [
-                  "Yes"
+                "Yes"
                 , "No"
             ]);
         }
         else {
-            sess.send("Oh, hey! You're back. Let's start this over.");
+            sess.send("Oh hey! You're back! Let's start this over.");
             sess.replaceDialog("/");
         }
     },
