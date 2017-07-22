@@ -9,7 +9,8 @@
                 "removeComments": true
             },
     "files": [
-        "./src/app.ts"
+          "./src/dialog.ts"
+        , "./src/intent.ts"
     ],
     "exclude": [
         "./node_modules",
