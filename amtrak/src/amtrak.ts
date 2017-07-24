@@ -9,6 +9,17 @@ const codes: string = fs.readFileSync("codes.xml", "utf-8");
 const routes: string = fs.readFileSync("amtrak.xml", "utf-8");
 const xml: CheerioStatic = cheerio.load(routes);
 
+export function searchTrainRoute(routeType: string, term: string): Route {
+    var route = null;
+    var routes = xml(routeType.toLowerCase()).each((idx: number, elem: CheerioElement) => {
+        if(route != null && xml(elem).text().indexOf(term) != -1) {
+            let node = xml(elem).parent();
+            route = getTrainRoute(node.attr("to"), node.attr("from"));
+        }
+    });
+    return route;
+}
+
 export function getTrainRoute(to: string, from: string): Route {
     try {
         var route = xml(`route[to='${to}'][from='${from}']`).first();

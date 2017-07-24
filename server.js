@@ -1,1 +1,1 @@
-module.exports = require("./dist/dialog");
+module.exports = require("./dist/intent");
