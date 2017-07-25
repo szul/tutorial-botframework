@@ -1,9 +1,11 @@
 /// <reference path="../node_modules/botbuilder/lib/botbuilder.d.ts" />
 /// <reference path="../node_modules/@types/restify/index.d.ts" />
+/// <reference path="../base/dist/types.d.ts" />
 /// <reference path="../amtrak/dist/amtrak.d.ts" />
 
 import * as builder from "botbuilder";
 import * as restify from "restify";
+import * as types from "../base/dist/types";
 import * as amtrak from "../amtrak/dist/amtrak";
 
 var server = restify.createServer();
@@ -36,7 +38,7 @@ bot.dialog("/", [
     },
     (sess, result) => {
         sess.userData.arrival = result.response;
-        var route: Route = amtrak.getTrainRoute(sess.userData.arrival, sess.userData.departure);
+        var route: types.Route = amtrak.getTrainRoute(sess.userData.arrival, sess.userData.departure);
         if(route.toCode === undefined) {
             sess.replaceDialog("/noresults", { entry: "dialog" });
         }

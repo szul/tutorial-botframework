@@ -4,26 +4,38 @@
 
 import * as fs from "fs";
 import * as cheerio from "cheerio";
+import * as types from "../../base/dist/types";
 
 const codes: string = fs.readFileSync("codes.xml", "utf-8");
 const routes: string = fs.readFileSync("amtrak.xml", "utf-8");
 const xml: CheerioStatic = cheerio.load(routes);
 
-export function searchTrainRoute(routeType: string, term: string): Route {
+export function searchTrainRoute(routeType: string, routeTypeCode: string, term: string): types.Route {
     var route = null;
-    var routes = xml(routeType.toLowerCase()).each((idx: number, elem: CheerioElement) => {
-        if(route != null && xml(elem).text().indexOf(term) != -1) {
-            let node = xml(elem).parent();
-            route = getTrainRoute(node.attr("to"), node.attr("from"));
+    var routes = xml(routeType).each((idx: number, elem: CheerioElement) => {
+        try {
+            if(route == null && xml(elem).text().toLowerCase().indexOf(term.toLowerCase()) != -1) {
+                let node = xml(elem).parent();
+                let rt: types.Route = getTrainRoute(
+                      (routeTypeCode === types.ARRIVAL) ? routeTypeCode : node.attr("to")
+                    , (routeTypeCode === types.DEPARTURE) ? routeTypeCode : node.attr("from")
+                );
+                if(rt != null && rt.toCode !== undefined) {
+                    route = rt;
+                }
+            }
+        }
+        catch(e) {
+            console.log(`An error has occurred: ${e}`);
         }
     });
     return route;
 }
 
-export function getTrainRoute(to: string, from: string): Route {
+export function getTrainRoute(to: string, from: string): types.Route {
     try {
         var route = xml(`route[to='${to}'][from='${from}']`).first();
-        var r: Route = {
+        var r: types.Route = {
               departure: new Date(route.find("departure").text())
             , arrival: new Date(route.find("arrival").text())
             , train: route.find("train").text()

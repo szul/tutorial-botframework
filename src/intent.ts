@@ -1,9 +1,11 @@
 /// <reference path="../node_modules/botbuilder/lib/botbuilder.d.ts" />
 /// <reference path="../node_modules/@types/restify/index.d.ts" />
+/// <reference path="../base/dist/types.d.ts" />
 /// <reference path="../amtrak/dist/amtrak.d.ts" />
 
 import * as builder from "botbuilder";
 import * as restify from "restify";
+import * as types from "../base/dist/types";
 import * as amtrak from "../amtrak/dist/amtrak";
 
 var server = restify.createServer();
@@ -20,7 +22,7 @@ server.post("/api/messages", conn.listen());
 
 var intents = new builder.IntentDialog();
 
-intents.matches(/departs|departing/i, [
+intents.matches(/departs|departing|depart/i, [
     (sess, args, next) => {
         if(sess.userData.arrival === undefined) {
             sess.beginDialog("/arrival");
@@ -35,23 +37,40 @@ intents.matches(/departs|departing/i, [
     }
 ]);
 
-intents.matches(/arrive|arrival/i, [
+intents.matches(/arrive|arrival|arriving/i, [
     (sess, args, next) => {
+        sess.dialogData.input = args.matched.input;
+        sess.dialogData.index = args.matched.index;
         if(sess.userData.departure === undefined) {
             sess.beginDialog("/departure");
         }
         else {
-            next(args)
+            next()
         }
     },
     (sess, result) => {
-        console.log(result);
-        //parse input, search route, and store results
+        if(sess.dialogData.input && sess.dialogData.index) {
+            let input = sess.dialogData.input;
+            let partial = (<string>input).substr(sess.dialogData.index).replace("?", "");
+            if(partial.indexOf(" ") != -1) {
+                let parts = partial.split(" ");
+                partial = partial.split(" ")[parts.length - 1];
+            }
+            let route: types.Route = amtrak.searchTrainRoute(types.ARRIVAL, sess.userData.arrival, partial);
+            if(!route || route.toCode === undefined) {
+                sess.replaceDialog("/noresults", {entry: "dialog" });
+            }
+        }
+        else {
+            sess.replaceDialog("/noresults", { entry: "dialog" });
+        }
     }
 ]);
 
 intents.onDefault([
     (sess, args, next) => {
+        sess.userData.arrival = undefined;
+        sess.userData.departure = undefined;
         if(!sess.userData.name) {
             sess.beginDialog("/profile");
         }
@@ -88,7 +107,7 @@ bot.dialog("/arrival", [
 
 bot.dialog("/results", [
     (sess, args, next) => {
-        var route: Route = sess.userData.route;
+        var route: types.Route = sess.userData.route;
         if(route && route.toCode === undefined) {
             sess.replaceDialog("/noresults", { entry: "dialog" });
         }

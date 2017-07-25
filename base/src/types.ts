@@ -1,4 +1,4 @@
-interface Route {
+export interface Route {
       departure: Date
     , arrival: Date
     , train: string
@@ -8,3 +8,6 @@ interface Route {
     , toCode: string
     , status: string
 }
+
+export const ARRIVAL = "to";
+export const DEPARTURE = "from";
