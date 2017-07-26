@@ -8,6 +8,28 @@ import * as restify from "restify";
 import * as types from "../base/dist/types";
 import * as amtrak from "../amtrak/dist/amtrak";
 
+function processRoute(sess: builder.Session, routeType: string, routeTypeValue: string) {
+    if(sess.dialogData.input && sess.dialogData.index) {
+        let input = sess.dialogData.input;
+        let partial = (<string>input).substr(sess.dialogData.index).replace("?", "");
+        if(partial.indexOf(" ") != -1) {
+            let parts = partial.split(" ");
+            partial = partial.split(" ")[parts.length - 1];
+        }
+        let route: types.Route = amtrak.searchTrainRoute(routeType, routeTypeValue, partial);
+        if(!route || route.toCode === undefined) {
+            sess.replaceDialog("/noresults", {entry: "dialog" });
+        }
+        else {
+            sess.userData.route = route;
+            sess.replaceDialog("/results");
+        }
+    }
+    else {
+        sess.replaceDialog("/noresults", { entry: "dialog" });
+    }
+}
+
 var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, () => {
     console.log(`Listening... ${server.name}... ${server.url}`);
@@ -24,16 +46,17 @@ var intents = new builder.IntentDialog();
 
 intents.matches(/departs|departing|depart/i, [
     (sess, args, next) => {
+        sess.dialogData.input = args.matched.input;
+        sess.dialogData.index = args.matched.index;
         if(sess.userData.arrival === undefined) {
             sess.beginDialog("/arrival");
         }
         else {
-            next(args)
+            next()
         }
     },
     (sess, result) => {
-        console.log(result);
-        //parse input, search route, and store results
+        processRoute(sess, types.DEPARTURE, sess.userData.departure);
     }
 ]);
 
@@ -49,21 +72,7 @@ intents.matches(/arrive|arrival|arriving/i, [
         }
     },
     (sess, result) => {
-        if(sess.dialogData.input && sess.dialogData.index) {
-            let input = sess.dialogData.input;
-            let partial = (<string>input).substr(sess.dialogData.index).replace("?", "");
-            if(partial.indexOf(" ") != -1) {
-                let parts = partial.split(" ");
-                partial = partial.split(" ")[parts.length - 1];
-            }
-            let route: types.Route = amtrak.searchTrainRoute(types.ARRIVAL, sess.userData.arrival, partial);
-            if(!route || route.toCode === undefined) {
-                sess.replaceDialog("/noresults", {entry: "dialog" });
-            }
-        }
-        else {
-            sess.replaceDialog("/noresults", { entry: "dialog" });
-        }
+        processRoute(sess, types.ARRIVAL, sess.userData.arrival);
     }
 ]);
 
@@ -108,16 +117,18 @@ bot.dialog("/arrival", [
 bot.dialog("/results", [
     (sess, args, next) => {
         var route: types.Route = sess.userData.route;
+        /*
         if(route && route.toCode === undefined) {
             sess.replaceDialog("/noresults", { entry: "dialog" });
         }
         else {
+        */
             sess.userData.lastRoute = route;
             builder.Prompts.choice(sess, `So you want to check the status of the train leaving ${route.from} and arriving at ${route.to}, correct?`, [
                   "Yes"
                 , "No"
             ]);
-        }
+        /*}*/
     },
     (sess, result) => {
         if(result.response.entity === "Yes") {
