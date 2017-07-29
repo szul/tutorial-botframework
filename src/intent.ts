@@ -109,7 +109,7 @@ bot.dialog("/arrival", [
         builder.Prompts.text(sess, "What is the three letter code for the arrival city?");
     },
     (sess, result) => {
-        sess.userData.departure = result.response;
+        sess.userData.arrival = result.response;
         sess.endDialog();
     }
 ]);
@@ -117,18 +117,17 @@ bot.dialog("/arrival", [
 bot.dialog("/results", [
     (sess, args, next) => {
         var route: types.Route = sess.userData.route;
-        /*
-        if(route && route.toCode === undefined) {
-            sess.replaceDialog("/noresults", { entry: "dialog" });
+        if(!route || route.toCode === undefined) {
+            sess.replaceDialog("/");
         }
         else {
-        */
             sess.userData.lastRoute = route;
+            sess.userData.route = null;
             builder.Prompts.choice(sess, `So you want to check the status of the train leaving ${route.from} and arriving at ${route.to}, correct?`, [
                   "Yes"
                 , "No"
             ]);
-        /*}*/
+        }
     },
     (sess, result) => {
         if(result.response.entity === "Yes") {
