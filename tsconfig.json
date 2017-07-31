@@ -9,7 +9,9 @@
                 "removeComments": true
             },
     "files": [
-          "./src/dialog.ts"
+          "./src/console.ts"
+        , "./src/universal.ts" 
+        , "./src/dialog.ts"
         , "./src/intent.ts"
     ],
     "exclude": [
