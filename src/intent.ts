@@ -8,25 +8,22 @@ import * as restify from "restify";
 import * as types from "../base/dist/types";
 import * as amtrak from "../amtrak/dist/amtrak";
 
-function processRoute(sess: builder.Session, routeType: string, routeTypeValue: string) {
+function processRoute(sess: builder.Session, routeType: string, routeTypeValue: string): void {
     if(sess.dialogData.input && sess.dialogData.index) {
-        let input = sess.dialogData.input;
-        let partial = (<string>input).substr(sess.dialogData.index).replace("?", "");
+        let input: string = sess.dialogData.input;
+        let partial = input.substr(sess.dialogData.index).replace("?", "");
         if(partial.indexOf(" ") != -1) {
             let parts = partial.split(" ");
             partial = partial.split(" ")[parts.length - 1];
         }
         let route: types.Route = amtrak.searchTrainRoute(routeType, routeTypeValue, partial);
         if(!route || route.toCode === undefined) {
-            sess.replaceDialog("/noresults", {entry: "dialog" });
+            sess.replaceDialog("/noresults", { entry: "dialog" });
         }
         else {
             sess.userData.route = route;
             sess.replaceDialog("/results");
         }
-    }
-    else {
-        sess.replaceDialog("/noresults", { entry: "dialog" });
     }
 }
 
@@ -52,7 +49,7 @@ intents.matches(/departs|departing|depart/i, [
             sess.beginDialog("/arrival");
         }
         else {
-            next()
+            next();
         }
     },
     (sess, result) => {
@@ -68,7 +65,7 @@ intents.matches(/arrive|arrival|arriving/i, [
             sess.beginDialog("/departure");
         }
         else {
-            next()
+            next();
         }
     },
     (sess, result) => {
@@ -84,11 +81,11 @@ intents.onDefault([
             sess.beginDialog("/profile");
         }
         else {
-            next()
+            next();
         }
     },
     (sess, result) => {
-        sess.send(`Hello, ${sess.userData.name}! What may I help you?`);
+        sess.send(`Hello ${sess.userData.name}! What may I help you with?`);
     }
 ]);
 
@@ -99,7 +96,7 @@ bot.dialog("/departure", [
         builder.Prompts.text(sess, "What is the three letter code for the departure city?");
     },
     (sess, result) => {
-        sess.userData.departure = result.response;
+        sess.userData.departure = result.reponse;
         sess.endDialog();
     }
 ]);
@@ -109,7 +106,7 @@ bot.dialog("/arrival", [
         builder.Prompts.text(sess, "What is the three letter code for the arrival city?");
     },
     (sess, result) => {
-        sess.userData.arrival = result.response;
+        sess.userData.arrival = result.reponse;
         sess.endDialog();
     }
 ]);
@@ -117,7 +114,7 @@ bot.dialog("/arrival", [
 bot.dialog("/results", [
     (sess, args, next) => {
         var route: types.Route = sess.userData.route;
-        if(!route || route.toCode === undefined) {
+        if(!route && route.toCode === undefined) {
             sess.replaceDialog("/");
         }
         else {
