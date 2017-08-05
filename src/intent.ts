@@ -8,6 +8,17 @@ import * as restify from "restify";
 import * as types from "../base/dist/types";
 import * as amtrak from "../amtrak/dist/amtrak";
 
+function hasRouteComponents(sess: builder.Session, args: any, routeType: string): boolean { //Refactored this
+    sess.dialogData.input = args.matched.input;
+    sess.dialogData.index = args.matched.index;
+    if(sess.userData[routeType] !== undefined) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 function processRoute(sess: builder.Session, routeType: string, routeTypeValue: string): void {
     if(sess.dialogData.input && sess.dialogData.index) {
         let input: string = sess.dialogData.input;
@@ -16,7 +27,7 @@ function processRoute(sess: builder.Session, routeType: string, routeTypeValue: 
             let parts = partial.split(" ");
             partial = partial.split(" ")[parts.length - 1];
         }
-        let route: types.Route = amtrak.searchTrainRoute(routeType, routeTypeValue, partial);
+        let route: types.Route = amtrak.searchTrainRoute(routeType, routeTypeValue, partial, true); //Added true for city
         if(!route || route.toCode === undefined) {
             sess.replaceDialog("/noresults", { entry: "dialog" });
         }
@@ -41,11 +52,16 @@ server.post("/api/messages", conn.listen());
 
 var intents = new builder.IntentDialog();
 
+intents.matches(/(?=departs|departing|depart)(?=arrive|arrival|arriving)/i, [ //Match both... use the look ahead
+    (sess, args) => {
+        console.log(args);
+        //Get route
+    }
+]);
+
 intents.matches(/departs|departing|depart/i, [
     (sess, args, next) => {
-        sess.dialogData.input = args.matched.input;
-        sess.dialogData.index = args.matched.index;
-        if(sess.userData.arrival === undefined) {
+        if(!hasRouteComponents(sess, args, types.ARRIVAL)) { //Abstracted this
             sess.beginDialog("/arrival");
         }
         else {
@@ -59,9 +75,7 @@ intents.matches(/departs|departing|depart/i, [
 
 intents.matches(/arrive|arrival|arriving/i, [
     (sess, args, next) => {
-        sess.dialogData.input = args.matched.input;
-        sess.dialogData.index = args.matched.index;
-        if(sess.userData.departure === undefined) {
+        if(!hasRouteComponents(sess, args, types.DEPARTURE)) {
             sess.beginDialog("/departure");
         }
         else {
@@ -93,7 +107,7 @@ bot.dialog("/", intents);
 
 bot.dialog("/departure", [
     (sess, args, next) => {
-        builder.Prompts.text(sess, "What is the three letter code for the departure city?");
+        builder.Prompts.text(sess, "What is your departure city?"); //Look for city
     },
     (sess, result) => {
         sess.userData.departure = result.reponse;
@@ -103,7 +117,7 @@ bot.dialog("/departure", [
 
 bot.dialog("/arrival", [
     (sess, args, next) => {
-        builder.Prompts.text(sess, "What is the three letter code for the arrival city?");
+        builder.Prompts.text(sess, "What is your arrival city?"); //Look for city
     },
     (sess, result) => {
         sess.userData.arrival = result.reponse;
@@ -112,19 +126,14 @@ bot.dialog("/arrival", [
 ]);
 
 bot.dialog("/results", [
-    (sess, args, next) => {
+    (sess, args, next) => { //Removed extra conditional check
         var route: types.Route = sess.userData.route;
-        if(!route && route.toCode === undefined) {
-            sess.replaceDialog("/");
-        }
-        else {
-            sess.userData.lastRoute = route;
-            sess.userData.route = null;
-            builder.Prompts.choice(sess, `So you want to check the status of the train leaving ${route.from} and arriving at ${route.to}, correct?`, [
-                  "Yes"
-                , "No"
-            ]);
-        }
+        sess.userData.lastRoute = route;
+        sess.userData.route = null;
+        builder.Prompts.choice(sess, `So you want to check the status of the train leaving ${route.from} and arriving at ${route.to}, correct?`, [
+                "Yes"
+            , "No"
+        ]);
     },
     (sess, result) => {
         if(result.response.entity === "Yes") {
