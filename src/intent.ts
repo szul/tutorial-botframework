@@ -52,10 +52,11 @@ server.post("/api/messages", conn.listen());
 
 var intents = new builder.IntentDialog();
 
-intents.matches(/(?=departs|departing|depart)(?=arrive|arrival|arriving)/i, [ //Match both... use the look ahead
+/* What if you intended to match both? */
+intents.matches(/(departs|departing|depart).*(arrive|arrival|arriving)/i, [
     (sess, args) => {
         console.log(args);
-        //Get route
+        //Process the match data
     }
 ]);
 

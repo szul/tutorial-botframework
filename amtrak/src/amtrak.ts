@@ -35,17 +35,7 @@ export function searchTrainRoute(routeType: string, routeTypeCode: string, term:
 
 export function getTrainRoute(to: string, from: string, byCity: boolean = false): types.Route {
     try {
-        var route;
-        if(byCity) {
-            route = xml(`route`).filter((idx: number, elem: CheerioElement) => {
-                if((xml(elem).find("from").text().indexOf(from) > -1) && (xml(elem).find("to").text().indexOf(to) > -1)) {
-                    return true;
-                }
-            }).first();
-        }
-        else {
-            route = xml(`route[to='${to}'][from='${from}']`).first();
-        }
+        var route = xml(`route[to='${to}'][from='${from}']`).first();
         var r: types.Route = {
               departure: new Date(route.find("departure").text())
             , arrival: new Date(route.find("arrival").text())
