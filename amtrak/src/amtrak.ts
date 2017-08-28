@@ -35,7 +35,8 @@ export function searchTrainRoute(routeType: string, routeTypeCode: string, term:
 
 export function getTrainRoute(to: string, from: string, byCity: boolean = false): types.Route {
     try {
-        var route = xml(`route[to='${to}'][from='${from}']`).first();
+        var routeSelector = `route[to='${to}'][from='${from}']`;
+        var route = xml(routeSelector).first();
         var r: types.Route = {
               departure: new Date(route.find("departure").text())
             , arrival: new Date(route.find("arrival").text())
