@@ -1,0 +1,6 @@
+{
+  "score": 0.4842105263157895,
+  "intent": "/arrive|arrival|arriving/i",
+  "expression": {},
+  "matched": ["arriving"]
+}

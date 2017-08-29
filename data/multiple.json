@@ -1,0 +1,6 @@
+{
+    "score": 0.6620689655172414,
+    "intent": "/(departs|departing|depart).*(arrive|arrival|arriving)/i",
+    "expression": {},
+    "matched": ["departing Charlottesville and arriving", "departing", "arriving"]
+}

@@ -27,7 +27,7 @@ function processRoute(sess: builder.Session, routeType: string, routeTypeValue: 
             let parts = partial.split(" ");
             partial = partial.split(" ")[parts.length - 1];
         }
-        let route: types.Route = amtrak.searchTrainRoute(routeType, routeTypeValue, partial, true); //Added true for city
+        let route: types.Route = amtrak.searchTrainRoute(routeType, routeTypeValue, partial); //Added true for city
         if(!route || route.toCode === undefined) {
             sess.replaceDialog("/noresults", { entry: "dialog" });
         }
@@ -62,6 +62,7 @@ intents.matches(/(departs|departing|depart).*(arrive|arrival|arriving)/i, [
 
 intents.matches(/departs|departing|depart/i, [
     (sess, args, next) => {
+        console.log(args);
         if(!hasRouteComponents(sess, args, types.ARRIVAL)) { //Abstracted this
             sess.beginDialog("/arrival");
         }
@@ -76,6 +77,7 @@ intents.matches(/departs|departing|depart/i, [
 
 intents.matches(/arrive|arrival|arriving/i, [
     (sess, args, next) => {
+        console.log(args);
         if(!hasRouteComponents(sess, args, types.DEPARTURE)) {
             sess.beginDialog("/departure");
         }

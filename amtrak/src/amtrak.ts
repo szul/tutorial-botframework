@@ -10,7 +10,7 @@ const codes: string = fs.readFileSync("codes.xml", "utf-8");
 const routes: string = fs.readFileSync("amtrak.xml", "utf-8");
 const xml: CheerioStatic = cheerio.load(routes);
 
-export function searchTrainRoute(routeType: string, routeTypeCode: string, term: string, byCity: boolean = false): types.Route {
+export function searchTrainRoute(routeType: string, routeTypeCode: string, term: string): types.Route {
     var route = null;
     var routes = xml(routeType).each((idx: number, elem: CheerioElement) => {
         try {
@@ -19,7 +19,6 @@ export function searchTrainRoute(routeType: string, routeTypeCode: string, term:
                 let rt: types.Route = getTrainRoute(
                       (routeTypeCode === types.ARRIVAL) ? routeTypeCode : node.attr("to")
                     , (routeTypeCode === types.DEPARTURE) ? routeTypeCode : node.attr("from")
-                    , byCity
                 );
                 if(rt != null && rt.toCode !== undefined) {
                     route = rt;
@@ -33,7 +32,7 @@ export function searchTrainRoute(routeType: string, routeTypeCode: string, term:
     return route;
 }
 
-export function getTrainRoute(to: string, from: string, byCity: boolean = false): types.Route {
+export function getTrainRoute(to: string, from: string): types.Route {
     try {
         var routeSelector = `route[to='${to}'][from='${from}']`;
         var route = xml(routeSelector).first();
