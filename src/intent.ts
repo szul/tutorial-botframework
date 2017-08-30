@@ -8,7 +8,7 @@ import * as restify from "restify";
 import * as types from "../base/dist/types";
 import * as amtrak from "../amtrak/dist/amtrak";
 
-function hasRouteComponents(sess: builder.Session, args: any, routeType: string): boolean { //Refactored this
+function hasRouteComponents(sess: builder.Session, args: any, routeType: string): boolean {
     sess.dialogData.input = args.matched.input;
     sess.dialogData.index = args.matched.index;
     if(sess.userData[routeType] !== undefined) {
@@ -27,7 +27,7 @@ function processRoute(sess: builder.Session, routeType: string, routeTypeValue: 
             let parts = partial.split(" ");
             partial = partial.split(" ")[parts.length - 1];
         }
-        let route: types.Route = amtrak.searchTrainRoute(routeType, routeTypeValue, partial); //Added true for city
+        let route: types.Route = amtrak.searchTrainRoute(routeType, routeTypeValue, partial);
         if(!route || route.toCode === undefined) {
             sess.replaceDialog("/noresults", { entry: "dialog" });
         }
@@ -63,7 +63,7 @@ intents.matches(/(departs|departing|depart).*(arrive|arrival|arriving)/i, [
 intents.matches(/departs|departing|depart/i, [
     (sess, args, next) => {
         console.log(args);
-        if(!hasRouteComponents(sess, args, types.ARRIVAL)) { //Abstracted this
+        if(!hasRouteComponents(sess, args, types.ARRIVAL)) {
             sess.beginDialog("/arrival");
         }
         else {
@@ -110,7 +110,7 @@ bot.dialog("/", intents);
 
 bot.dialog("/departure", [
     (sess, args, next) => {
-        builder.Prompts.text(sess, "What is your departure city?"); //Look for city
+        builder.Prompts.text(sess, "What is your departure city?");
     },
     (sess, result) => {
         sess.userData.departure = result.reponse;
@@ -120,7 +120,7 @@ bot.dialog("/departure", [
 
 bot.dialog("/arrival", [
     (sess, args, next) => {
-        builder.Prompts.text(sess, "What is your arrival city?"); //Look for city
+        builder.Prompts.text(sess, "What is your arrival city?");
     },
     (sess, result) => {
         sess.userData.arrival = result.reponse;
@@ -129,7 +129,7 @@ bot.dialog("/arrival", [
 ]);
 
 bot.dialog("/results", [
-    (sess, args, next) => { //Removed extra conditional check
+    (sess, args, next) => {
         var route: types.Route = sess.userData.route;
         sess.userData.lastRoute = route;
         sess.userData.route = null;

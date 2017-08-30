@@ -13,6 +13,7 @@
         , "./src/universal.ts" 
         , "./src/dialog.ts"
         , "./src/intent.ts"
+        , "./src/intentTriggerAction.ts"
     ],
     "exclude": [
         "./node_modules",
