@@ -52,7 +52,10 @@ server.post("/api/messages", conn.listen());
 
 var intents = new builder.IntentDialog();
 
-/* What if you intended to match both? */
+/* 
+ * What if you intended to match both?
+ * Notice how difficult it would be to create an adequate regular expression, and then parse the matched results.
+ */
 intents.matches(/(departs|departing|depart).*(arrive|arrival|arriving)/i, [
     (sess, args) => {
         console.log(args);
