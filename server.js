@@ -1,1 +1,1 @@
-module.exports = require("./dist/intentTriggerAction");
+module.exports = require("./dist/luis");

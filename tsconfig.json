@@ -14,6 +14,7 @@
         , "./src/dialog.ts"
         , "./src/intent.ts"
         , "./src/intentTriggerAction.ts"
+        , "./src/luis.ts"
     ],
     "exclude": [
         "./node_modules",

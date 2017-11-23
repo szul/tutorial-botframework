@@ -10,9 +10,19 @@ import * as amtrak from "../amtrak/dist/amtrak";
 
 require("dotenv-extended").load();
 
+function logIntents(args: any): void {
+    console.log(args);
+    console.log(args.intent.intent);
+    console.log(args.intent.entities);
+}
+/*
+function getEntity(builder: any, args: any, entity: string): string {
+    return builder.EntityRecognizer.findEntity(args.intent.entities, entity);
+}
+*/
 function hasRouteComponents(sess: builder.Session, args: any, routeType: string): boolean {
-    sess.dialogData.input = args.intent.matched.input;
-    sess.dialogData.index = args.intent.matched.index;
+    sess.dialogData.input = args.intent.entities[0].entity;
+    sess.dialogData.index = args.intent.entities[0].startIndex;
     if(sess.userData[routeType] !== undefined) {
         return true;
     }
@@ -24,12 +34,14 @@ function hasRouteComponents(sess: builder.Session, args: any, routeType: string)
 function processRoute(sess: builder.Session, routeType: string, routeTypeValue: string): void {
     if(sess.dialogData.input && sess.dialogData.index) {
         let input: string = sess.dialogData.input;
+        /*
         let partial = input.substr(sess.dialogData.index).replace("?", "");
         if(partial.indexOf(" ") != -1) {
             let parts = partial.split(" ");
             partial = partial.split(" ")[parts.length - 1];
         }
-        let route: types.Route = amtrak.searchTrainRoute(routeType, routeTypeValue, partial);
+        */
+        let route: types.Route = amtrak.searchTrainRoute(routeType, routeTypeValue, input);
         if(!route || route.toCode === undefined) {
             sess.replaceDialog("/noresults", { entry: "dialog" });
         }
@@ -55,14 +67,14 @@ bot.recognizer(new builder.LuisRecognizer(process.env.LUIS_MODEL_URL));
 server.post("/api/messages", conn.listen());
 
 bot.dialog("/multiMatch", (sess, args) => {
-    console.log(args);
+    logIntents(args);
 }).triggerAction({
     matches: "composite"
 });
 
 bot.dialog("/departMatch", [
     (sess, args, next) => {
-        console.log(args);
+        logIntents(args);
         /*
         if(!hasRouteComponents(sess, args, types.ARRIVAL)) {
             sess.beginDialog("/arrival");
@@ -81,7 +93,7 @@ bot.dialog("/departMatch", [
 
 bot.dialog("/arriveMatch", [
     (sess, args, next) => {
-        console.log(args);
+        logIntents(args);
         /*
         if(!hasRouteComponents(sess, args, types.DEPARTURE)) {
             sess.beginDialog("/departure");
