@@ -1,0 +1,38 @@
+{
+    "query": "What is the status of the train arriving in Philadelphia?",
+    "topScoringIntent": {
+      "intent": "arrival status",
+      "score": 0.9517766
+    },
+    "intents": [
+      {
+        "intent": "arrival status",
+        "score": 0.9517766
+      },
+      {
+        "intent": "None",
+        "score": 0.0217941087
+      },
+      {
+        "intent": "composite",
+        "score": 3.718378E-06
+      },
+      {
+        "intent": "time",
+        "score": 8.988389E-09
+      },
+      {
+        "intent": "departure status",
+        "score": 4.794434E-12
+      }
+    ],
+    "entities": [
+      {
+        "entity": "philadelphia",
+        "type": "builtin.geography.city",
+        "startIndex": 44,
+        "endIndex": 55,
+        "score": 0.9909561
+      }
+    ]
+  }

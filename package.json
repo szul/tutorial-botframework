@@ -28,6 +28,7 @@
     "@types/restify": "^4.3.4",
     "botbuilder": "^3.8.4",
     "cheerio": "^1.0.0-rc.2",
+    "dotenv-extended": "^2.0.1",
     "restify": "^5.0.0",
     "typescript": "^2.4.1"
   }
