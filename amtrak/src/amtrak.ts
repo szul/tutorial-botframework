@@ -11,6 +11,7 @@ const routes: string = fs.readFileSync("amtrak.xml", "utf-8");
 const xml: CheerioStatic = cheerio.load(routes);
 
 export function searchTrainRoute(routeType: string, routeTypeCode: string, term: string): types.Route {
+    //Clean this up later since routeTypeCode isn't needed once the tutorial moves to showing LUIS
     var route = null;
     var routes = xml(routeType).each((idx: number, elem: CheerioElement) => {
         try {

@@ -7,4 +7,76 @@
         <to>Philadelphia, PA</to>
         <status>On Time</status>
     </route>
+    <route to="DEN" from="IND">
+        <departure>2018-08-09T13:20:00</departure>
+        <arrival>2018-08-09T18:50:00</arrival>
+        <train>1589</train>
+        <from>Denver, CO</from>
+        <to>Indianapolis, IN</to>
+        <status>Delayed</status>
+    </route>
+    <route to="NYC" from="PHL">
+        <departure>2017-11-09T13:20:00</departure>
+        <arrival>2017-11-09T18:50:00</arrival>
+        <train>105</train>
+        <from>Philadelphia, PA</from>
+        <to>New York City, NY</to>
+        <status>On Time</status>
+    </route>
+    <route to="BOS" from="NYC">
+        <departure>2018-01-09T13:20:00</departure>
+        <arrival>2018-01-09T18:50:00</arrival>
+        <train>501</train>
+        <from>New York City, NY</from>
+        <to>Boston, MA</to>
+        <status>Early</status>
+    </route>
+    <route to="BOS" from="NYC">
+        <departure>2018-01-09T13:20:00</departure>
+        <arrival>2018-01-09T18:50:00</arrival>
+        <train>1505</train>
+        <from>New York City, NY</from>
+        <to>Boston, MA</to>
+        <status>On Time</status>
+    </route>
+    <route to="WDC" from="PHL">
+        <departure>2017-10-09T13:20:00</departure>
+        <arrival>2017-10-09T18:50:00</arrival>
+        <train>1776</train>
+        <from>Philadelphia, PA</from>
+        <to>Washington, DC</to>
+        <status>Delayed</status>
+    </route>
+    <route to="RVA" from="WDC">
+        <departure>2018-09-09T13:20:00</departure>
+        <arrival>2018-09-09T18:50:00</arrival>
+        <train>1500</train>
+        <from>Washington, DC</from>
+        <to>Richmond, VA</to>
+        <status>On Time</status>
+    </route>
+    <route to="CVS" from="RVA">
+        <departure>2017-07-09T13:20:00</departure>
+        <arrival>2017-07-09T18:50:00</arrival>
+        <train>8900</train>
+        <from>Richmond, VA</from>
+        <to>Charlottesville, VA</to>
+        <status>Early</status>
+    </route>
+    <route to="SLS" from="CVS">
+        <departure>2017-12-09T13:20:00</departure>
+        <arrival>2017-12-09T18:50:00</arrival>
+        <train>1000</train>
+        <from>Charlottesville, VA</from>
+        <to>St. Louis, MO</to>
+        <status>Delayed</status>
+    </route>
+    <route to="ORL" from="JAX">
+        <departure>2017-06-09T13:20:00</departure>
+        <arrival>2017-06-09T18:50:00</arrival>
+        <train>D23</train>
+        <from>Jacksonville, FL</from>
+        <to>Orlando, FL</to>
+        <status>On Time</status>
+    </route>
 </trains>
