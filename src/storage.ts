@@ -4,6 +4,7 @@
 /// <reference path="../amtrak/dist/amtrak.d.ts" />
 
 import * as builder from "botbuilder";
+//import * as azure from "botbuilder-azure";
 import * as restify from "restify";
 import * as types from "../base/dist/types";
 import * as amtrak from "../amtrak/dist/amtrak";
