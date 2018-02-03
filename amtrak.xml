@@ -79,4 +79,52 @@
         <to>Orlando, FL</to>
         <status>On Time</status>
     </route>
+    <route to="PHL" from="CVS">
+        <departure>2017-07-09T13:20:00</departure>
+        <arrival>2017-07-09T18:50:00</arrival>
+        <train>C2 1900</train>
+        <from>Charlottesville, VA</from>
+        <to>Philadelphia, PA</to>
+        <status>Delayed</status>
+    </route>
+    <route to="DEN" from="IND">
+        <departure>2018-10-09T13:20:00</departure>
+        <arrival>2018-10-09T18:50:00</arrival>
+        <train>DID 1422</train>
+        <from>Denver, CO</from>
+        <to>Indianapolis, IN</to>
+        <status>On Time</status>
+    </route>
+    <route to="NYC" from="PHL">
+        <departure>2018-11-09T13:20:00</departure>
+        <arrival>2018-11-09T18:50:00</arrival>
+        <train>1105</train>
+        <from>Philadelphia, PA</from>
+        <to>New York City, NY</to>
+        <status>Early</status>
+    </route>
+    <route to="BOS" from="NYC">
+        <departure>2018-05-09T13:20:00</departure>
+        <arrival>2018-05-09T18:50:00</arrival>
+        <train>B 5011</train>
+        <from>New York City, NY</from>
+        <to>Boston, MA</to>
+        <status>Early</status>
+    </route>
+    <route to="RVA" from="WDC">
+        <departure>2018-09-09T13:20:00</departure>
+        <arrival>2018-09-09T18:50:00</arrival>
+        <train>C 1500</train>
+        <from>Washington, DC</from>
+        <to>Richmond, VA</to>
+        <status>Early</status>
+    </route>
+    <route to="CVS" from="RVA">
+        <departure>2018-07-09T13:20:00</departure>
+        <arrival>2018-07-09T18:50:00</arrival>
+        <train>CC 8900</train>
+        <from>Richmond, VA</from>
+        <to>Charlottesville, VA</to>
+        <status>On Time</status>
+    </route>
 </trains>
