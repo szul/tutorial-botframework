@@ -16,6 +16,7 @@
         , "./src/intentTriggerAction.ts"
         , "./src/luis.ts"
         , "./src/storage.ts"
+        , "./src/luisFull.ts"
     ],
     "exclude": [
         "./node_modules",
