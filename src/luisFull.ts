@@ -16,14 +16,28 @@ const TABLENAME = process.env.TABLENAME;
 const STORAGENAME = process.env.STORAGENAME;
 const STORAGEKEY = process.env.STORAGEKEY;
 
-function hasRouteComponents(sess: builder.Session, args: any, routeType: string): boolean {
-    let entity = builder.EntityRecognizer.findEntity(args.intent.entities, "geography");
-    console.log(entity);
+function normalizeAndStoreData(sess: builder.Session, args: any): void {
+    try {
+        sess.dialogData.toFrom = builder.EntityRecognizer.findEntity(args.intent.entities, "to-from");
+        sess.dialogData.arriveDepart = builder.EntityRecognizer.findEntity(args.intent.entities, "arrive-depart");
+        sess.dialogData.geo =  builder.EntityRecognizer.findEntity(args.intent.entities, "builtin.geography.city");
+        sess.dialogData.stateCode = builder.EntityRecognizer.findEntity(args.intent.entities, "state-code");
+    }
+    catch(e) { 
+        console.log(e);
+    }
+}
+
+function hasRouteComponents(sess: builder.Session, routeType: string): boolean {
     return (sess.userData[routeType] !== undefined)
 }
 
+function getCity(sess: builder.Session): string {
+    return (sess.dialogData.geo != null) ? sess.dialogData.geo : null;
+}
+
 function processRoute(sess: builder.Session, routeType: string, routeTypeValue: string): void {
-    let input: string = sess.dialogData.input;
+    let input: string = getCity(sess);
     let route: types.Route = amtrak.searchTrainRoute(routeType, routeTypeValue, input);
     if(!route || route.toCode === undefined) {
         sess.replaceDialog("/noresults", { entry: "dialog" });
@@ -59,7 +73,8 @@ bot.dialog("/multiMatch", (sess, args) => {
 
 bot.dialog("/departMatch", [
     (sess, args, next) => {
-        if(!hasRouteComponents(sess, args, types.ARRIVAL)) {
+        normalizeAndStoreData(sess, args);
+        if(!hasRouteComponents(sess, types.ARRIVAL)) {
             sess.beginDialog("/arrival");
         }
         else {
@@ -75,7 +90,8 @@ bot.dialog("/departMatch", [
 
 bot.dialog("/arriveMatch", [
     (sess, args, next) => {
-        if(!hasRouteComponents(sess, args, types.DEPARTURE)) {
+        normalizeAndStoreData(sess, args);
+        if(!hasRouteComponents(sess, types.DEPARTURE)) {
             sess.beginDialog("/departure");
         }
         else {
