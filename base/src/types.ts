@@ -11,3 +11,4 @@ export interface Route {
 
 export const ARRIVAL = "to";
 export const DEPARTURE = "from";
+export const FULL = "full";

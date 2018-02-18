@@ -17,15 +17,10 @@ const STORAGENAME = process.env.STORAGENAME;
 const STORAGEKEY = process.env.STORAGEKEY;
 
 function normalizeAndStoreData(sess: builder.Session, args: any): void {
-    try {
-        sess.dialogData.toFrom = builder.EntityRecognizer.findEntity(args.intent.entities, "to-from");
-        sess.dialogData.arriveDepart = builder.EntityRecognizer.findEntity(args.intent.entities, "arrive-depart");
-        sess.dialogData.geo =  builder.EntityRecognizer.findEntity(args.intent.entities, "builtin.geography.city");
-        sess.dialogData.stateCode = builder.EntityRecognizer.findEntity(args.intent.entities, "state-code");
-    }
-    catch(e) { 
-        console.log(e);
-    }
+    sess.dialogData.toFrom = builder.EntityRecognizer.findEntity(args.intent.entities, "to-from");
+    sess.dialogData.arriveDepart = builder.EntityRecognizer.findEntity(args.intent.entities, "arrive-depart");
+    sess.dialogData.geo =  builder.EntityRecognizer.findEntity(args.intent.entities, "builtin.geography.city");
+    sess.dialogData.stateCode = builder.EntityRecognizer.findEntity(args.intent.entities, "state-code");
 }
 
 function hasRouteComponents(sess: builder.Session, routeType: string): boolean {
@@ -36,7 +31,7 @@ function getCity(sess: builder.Session): string {
     return (sess.dialogData.geo != null) ? sess.dialogData.geo.entity : null;
 }
 
-function processRoute(sess: builder.Session, routeType: string, routeTypeValue: string): void {
+function processRoute(sess: builder.Session, routeType: string, routeTypeValue?: string): void {
     let input: string = getCity(sess);
     let route: types.Route = amtrak.searchTrainRoute(routeType, routeTypeValue, input);
     if(!route || route.toCode === undefined) {
@@ -66,7 +61,8 @@ bot.recognizer(new builder.LuisRecognizer(process.env.LUIS_MODEL_URL));
 server.post("/api/messages", conn.listen());
 
 bot.dialog("/multiMatch", (sess, args) => {
-    //...
+    normalizeAndStoreData(sess, args);
+    //processRoute(sess, types.FULL);
 }).triggerAction({
     matches: "composite"
 });
