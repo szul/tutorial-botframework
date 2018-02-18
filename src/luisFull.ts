@@ -33,7 +33,7 @@ function hasRouteComponents(sess: builder.Session, routeType: string): boolean {
 }
 
 function getCity(sess: builder.Session): string {
-    return (sess.dialogData.geo != null) ? sess.dialogData.geo : null;
+    return (sess.dialogData.geo != null) ? sess.dialogData.geo.entity : null;
 }
 
 function processRoute(sess: builder.Session, routeType: string, routeTypeValue: string): void {
