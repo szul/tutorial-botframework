@@ -1,1 +1,1 @@
-module.exports = require("./dist/luisFull");
+module.exports = require("./dist/multiEntity");

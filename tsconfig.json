@@ -17,6 +17,7 @@
         , "./src/luis.ts"
         , "./src/storage.ts"
         , "./src/luisFull.ts"
+        , "./src/multiEntity.ts"
     ],
     "exclude": [
         "./node_modules",
