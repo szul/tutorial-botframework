@@ -1,0 +1,15 @@
+{
+    "name": "tutorial-botframework",
+    "description": "",
+    "secretKey": "",
+    "services": [
+        {
+            "appId": "",
+            "id": "00fb58e0-5225-11e8-9f3b-0745be6cd08c",
+            "type": "endpoint",
+            "appPassword": "",
+            "endpoint": "http://localhost:3978/api/messages",
+            "name": "http://localhost:3978/api/messages"
+        }
+    ]
+}
