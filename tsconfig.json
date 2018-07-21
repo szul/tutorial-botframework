@@ -18,6 +18,7 @@
         , "./src/storage.ts"
         , "./src/luisFull.ts"
         , "./src/multiEntity.ts"
+        , "./src/richCards.ts"
     ],
     "exclude": [
         "./node_modules",
