@@ -45,7 +45,7 @@ function processRoute(sess: builder.Session, routeType: string, routeTypeValue?:
 
 function createHeroCard(sess: builder.Session, title: string, status: string): builder.HeroCard {
     return new builder.HeroCard(sess)
-        .title(title)
+        .title(`Train: ${title}`)
         .subtitle("")
         .text(status)
         .images([

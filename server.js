@@ -1,1 +1,1 @@
-module.exports = require("./dist/multiEntity");
+module.exports = require("./dist/richCards");
